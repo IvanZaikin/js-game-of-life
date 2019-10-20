@@ -1,39 +1,35 @@
-import { CELL } from "./types";
-
-interface CellCalculator {
-    (cell: CELL, neighbors: number): CELL;
-}
+import { CELL, Cell, CellFactory, Population } from "./types";
 
 export class Generation {
     constructor(
-        public cells: CELL[][]
+        public cellMaker: CellFactory,
     ) {
     }
 
-    next(calculateCell: CellCalculator): Generation {
-        const newCells: CELL[][] = Array.from({ length: this.cells.length }, () => []);
-        this.cells.forEach((cellsRow: CELL[], rowIndex: number) => {
-            cellsRow.forEach((cell: CELL, columnIndex: number) => {
-                const neighbors = this.getNeighbors(rowIndex, columnIndex);
-                const newCell = calculateCell(cell, neighbors);
-                newCells[rowIndex].push(newCell);
+    next(population: Population): Population {
+        const newPopulation: Population = Array.from({ length: population.length }, () => []);
+        population.forEach((cells: Cell[], rowIndex: number) => {
+            cells.forEach((cell: Cell, columnIndex: number) => {
+                const neighbors = this.getNeighbors(population, rowIndex, columnIndex);
+                const newCell = this.cellMaker(cell, neighbors);
+                newPopulation[rowIndex].push(newCell);
             });
         });
-        return new Generation(newCells);
+        return newPopulation;
     }
 
-    private getNeighbors(rowIndex: number, columnIndex: number): number {
+    private getNeighbors(population: Population, rowIndex: number, columnIndex: number): number {
         const shifts = [
             [-1, -1], [-1, 0], [-1, 1],
             [ 0, -1],          [ 0, 1],
             [ 1, -1], [ 1, 0], [ 1, 1],
         ];
         return shifts.reduce((acc, [rowShift, columnShift]) =>
-            acc + this.getCell(rowIndex + rowShift, columnIndex + columnShift), 0);
+            acc + this.getCell(population, rowIndex + rowShift, columnIndex + columnShift), 0);
     }
 
-    private getCell(rowIndex: number, columnIndex: number): CELL {
-        const rowCells = this.cells[rowIndex] || [];
-        return rowCells[columnIndex] || CELL.DEAD;
+    private getCell(population: Population, rowIndex: number, columnIndex: number): Cell {
+        const cells = population[rowIndex] || [];
+        return cells[columnIndex] || CELL.DEAD;
     }
 }

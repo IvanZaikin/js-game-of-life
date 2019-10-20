@@ -1,10 +1,7 @@
-import { CELL } from "./types";
+import { CELL, Cell, Population } from "./types";
 
-export function cliReder(cells: CELL[][]): void {
-    // cells.forEach((rowCells: CELL[]) => {
-    //     console.log(`|${rowCells.join(' ')}|`);
-    // });
-    cells.forEach((rowCells: CELL[]) => {
-        console.log(`|${rowCells.map(cell => cell === CELL.ALIVE ? '*' : ' ').join(' ')}|`);
+export function cliReder(population: Population): void {
+    population.forEach((cells: Cell[]) => {
+        console.log(`|${cells.map(cell => (cell === CELL.ALIVE && '*') || ' ').join(' ')}|`);
     });
 }

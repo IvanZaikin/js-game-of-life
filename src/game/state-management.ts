@@ -1,6 +1,6 @@
-import { CELL } from './types';
+import { CELL, Cell } from './types';
 
-export function nextState(cell: CELL, neighbors: number): CELL {
+export function nextState(cell: Cell, neighbors: number): Cell {
     if (cell === CELL.ALIVE) {
         return +(1 < neighbors && neighbors < 4);
     }

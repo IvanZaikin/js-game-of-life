@@ -1,22 +1,23 @@
 import { nextState } from './game/state-management';
 import { Generation } from './game/generation';
 import { cliReder } from './game/renderers';
+import { Population } from './game/types';
 
 const Scenario = require('../data.json');
 
 const [ scenario ] = process.argv.slice(2);
 
-let cells = (<any>Scenario)[scenario];
+let population: Population = Scenario[scenario];
 
-if (!cells) process.exit(1);
+if (!population) process.exit(1);
 
-let generation = new Generation(cells);
+const generation = new Generation(nextState);
 
-const render = () => cliReder(generation.cells);
+const render = () => cliReder(population);
 
 render();
 
 setInterval(() => {
-    generation = generation.next(nextState);
+    population = generation.next(population);
     render();
-}, 500);
+}, 300);
