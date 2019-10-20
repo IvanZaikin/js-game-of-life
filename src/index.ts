@@ -1,6 +1,6 @@
 import { cellMaker } from './game/cell.factory';
 import { Generation } from './game/generation';
-import { cliReder } from './game/renderers';
+import { cliReder as render } from './game/renderers';
 import { Population } from './game/types';
 
 const Scenario = require('../data.json');
@@ -13,11 +13,9 @@ if (!population) process.exit(1);
 
 const generation = new Generation(cellMaker);
 
-const render = () => cliReder(population);
-
-render();
+render(population);
 
 setInterval(() => {
     population = generation.next(population);
-    render();
+    render(population);
 }, 300);
