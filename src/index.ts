@@ -5,7 +5,7 @@ import { Population } from './game/types';
 
 const Scenario = require('../data.json');
 
-const [ scenario ] = process.argv.slice(2);
+const [ scenario, speed = 300 ] = process.argv.slice(2);
 
 let population: Population = Scenario[scenario];
 
